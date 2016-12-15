@@ -23,8 +23,8 @@ public class MainActivity  extends AppCompatActivity {
     public void calcularOperacion(View view) {
         int n = Integer.parseInt(entrada.getText().toString());
         salida.append(n + "! = ");
-        int res = factorial(n);
-        salida.append(res +"\n");
+        MiThread thread = new MiThread(n);
+        thread.start();
     }
     //Metodo para calcular el factorial de un numero entero
     public int factorial(int n) {
@@ -34,5 +34,23 @@ public class MainActivity  extends AppCompatActivity {
             SystemClock.sleep(1000);
         }
         return res;
+    }
+    //Practica 5.2
+    //Creamos un hilo nuevo
+    class MiThread extends Thread {
+        private int n, res;
+        public MiThread(int n) {
+            this.n = n;
+        }
+        @Override
+        public void run() {
+            res = factorial(n);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    salida.append(res + "\n");
+                }
+            });
+        }
     }
 }
